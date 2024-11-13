@@ -1,8 +1,36 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNES</title>
+    <link rel="stylesheet" href="../static/normalize.css">
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <!-- Adicionar Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-{% block conteudo %}
+  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  
+</head>
+<body>
 
 <div style="overflow-x:auto;">
+    <div class="form">
+        <form method="post" action="/contato">
+
+            <label for="email">Seu e-mail:</label><br>
+            <input type="email" id="email" name="email" required><br>
+            <label for="assunto">Assunto:</label><br>
+            <input type="text" id="assunto" name="assunto"required><br> 
+            <label for="descricao">Descrição:</label><br>
+            <input type="text" id="descricao" name="descricao"required><br><br>
+            <input type="submit" value="Submit">
+
+        </form>
+    </div>
 
     <table id="users" class="display">
         <thead>
@@ -15,7 +43,6 @@
         </thead>
         
         <tbody>
-        {% for user in userDetails %}
             <tr>
                 <td>{{ user[0] }}</td>
                 <td>{{ user[1] }}</td>
@@ -32,9 +59,9 @@
                     </a>
                 </td>
             </tr>
-        {% endfor %}
         </tbody>
     </table>
 </div>
 
-{% endblock %}
+</body>
+</html>
