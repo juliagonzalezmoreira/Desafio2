@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+
+
+<div class="form">
+    <h2>Editar Usuário</h2>
+    <form method="post">
+
+        <label for="email">Seu e-mail:</label><br>
+        <input type="email" id="email" name="email" ><br>
+        <label for="assunto">Assunto:</label><br>
+        <input type="text" id="assunto" name="assunto"><br> 
+        <label for="descricao">Descrição:</label><br>
+        <input type="text" id="descricao" name="descricao"><br><br>
+        <input type="submit" value="Submit">
+
+    </form>
+</div>
+
+{% endblock %} 
