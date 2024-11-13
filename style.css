@@ -1,0 +1,55 @@
+*{
+    padding: 0%;
+    margin: 0%;
+    box-sizing: border-box;
+}
+
+.nav {
+    border-top: 10px solid rgb(109, 120, 168);
+    display: inline-block;
+    width: 100%;
+    padding: 24px 70px 24px 130px;
+    box-sizing: border-box;
+}
+
+.nav img#logo {
+    width: 200px;
+}
+
+.nav-links {
+    float: right;
+    height: 50px;
+    text-align: center;
+    padding: 20px 0;
+}
+
+a.nav-link {
+    font-size: 18px;
+    padding: 3px 5px;
+    border-right: 1px solid grey;
+    text-align: center;
+}
+
+.capa{
+    width: 100%;
+    padding: 0 70px 0 130px;
+    background-color: lightgrey;
+}
+.capa img{
+    height: 100%;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.content{
+    padding: 10px 70px 10px 130px;
+}
+.content p{
+    margin-bottom: 16px;
+}
+.content-rights{
+    text-align: center;
+    margin-top: 16px;
+    font-weight: bold;
+}
+
