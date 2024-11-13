@@ -2,42 +2,40 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta nome="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Contatos</title>
 </head>
 <body>
     <nav class="nav"> <img src="logo.png" alt="Logo unes" id="logo">
         <div class="nav-links">
-            <a class="nav-link"
-                href="./index.html">Home</a>
+            <a class="nav-link" href="./home.html">Home</a>
             <a class="nav-link" href="./about.html">Quem Somos</a>
-            <a class="nav-link"
-                href="./form.html">Contato</a>
+            <a class="nav-link" href="./index.html">Contato</a>
         </div>
     </nav>
 
 <div class="content-rights">
     <h2>Contatos</h2>
     <br>
-    <label for="name">Nome:</label>
-    <input type="text" id="name" placeholder="Digite o nome">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" placeholder="Digite o nome">
     <label for="email">Email:</label>
     <input type="email" id="email" placeholder="Digite o email">
     <button onclick="addContact()">Adicionar Contato</button>
 
-<table>
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody id="contactList">
-        <!-- Os contatos serão adicionados aqui -->
-    </tbody>
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody id="contactList">
+            <!-- Os contatos serão adicionados aqui -->
+        </tbody>
+    </table>
 
 </div>
 
@@ -45,13 +43,13 @@
     function renderContacts(contacts) {
         const contactList = document.getElementById('contactList');
         contactList.innerHTML = '';
-        contacts.forEach((contact, index) => {
+        contacts.forEach((contact) => {
             const row = `<tr>
-                <td>${contact.name}</td>
+                <td>${contact.nome}</td>
                 <td>${contact.email}</td>
                 <td>
-                    <button onclick="editContact(${index})">Editar</button>
-                    <button onclick="deleteContact(${index})">Excluir</button>
+                    <button onclick="editContact(${contact.id})">Editar</button>
+                    <button onclick="deleteContact(${contact.id})">Excluir</button>
                 </td>
             </tr>`;
             contactList.innerHTML += row;
@@ -59,49 +57,49 @@
     }
 
     function fetchContacts() {
-        fetch('/contacts')
+        fetch('/api/contatos')
             .then(response => response.json())
             .then(data => renderContacts(data));
     }
 
     function addContact() {
-        const name = document.getElementById('name').value;
+        const nome = document.getElementById('nome').value;
         const email = document.getElementById('email').value;
 
-        if (!name || !email) {
+        if (!nome || !email) {
             alert("Por favor, preencha todos os campos.");
             return;
         }
 
-        fetch('/contacts', {
+        fetch('/api/contatos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ name, email })
+            body: JSON.stringify({ nome, email })
         })
         .then(response => response.json())
         .then(() => {
             fetchContacts();
-            document.getElementById('name').value = '';
+            document.getElementById('nome').value = '';
             document.getElementById('email').value = '';
         });
     }
 
-    function editContact(index) {
-        const name = prompt("Novo nome:");
+    function editContact(id) {
+        const nome = prompt("Novo nome:");
         const email = prompt("Novo email:");
 
-        if (name && email) {
-            fetch(`/contacts/${index}`, {
+        if (nome && email) {
+            fetch(`/api/contatos/${id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email })
+                body: JSON.stringify({ nome, email })
             })
             .then(() => fetchContacts());
         }
     }
 
-    function deleteContact(index) {
-        fetch(`/contacts/${index}`, { method: 'DELETE' })
+    function deleteContact(id) {
+        fetch(`/api/contatos/${id}`, { method: 'DELETE' })
             .then(() => fetchContacts());
     }
 

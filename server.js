@@ -1,57 +1,88 @@
 const express = require('express');
+const mysql = require('mysql2');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+const path = require('path');
+
 const app = express();
-const port = 3000;
-
+app.use(cors());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
-// Armazenando contatos em memória (poderia ser um banco de dados)
-let contacts = [];
+app.use(express.static(path.join(__dirname, 'template')));
 
-app.use(express.static('public'));
-
-// Rota para listar os contatos
-app.get('/contacts', (req, res) => {
-    res.json(contacts);
+// Conectar ao banco de dados MySQL
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'ju070205',
+    database: 'crud_db'
 });
 
-// Rota para adicionar um novo contato
-app.post('/contacts', (req, res) => {
-    const { name, email } = req.body;
-    if (!name || !email) {
-        return res.status(400).send("Nome e email são obrigatórios.");
+db.connect((err) => {
+    if (err) throw err;
+    console.log('Conectado ao banco de dados!');
+});
+
+// Endpoint para inserir dados
+app.post('/api/contatos', (req, res) => {
+    const { nome, email } = req.body;
+
+    if (!nome || !email) {
+        return res.status(400).json({ error: 'Nome e email são obrigatórios!' });
     }
-    const newContact = { name, email };
-    contacts.push(newContact);
-    res.status(201).json(newContact);
+
+    const sql = 'INSERT INTO contato (nome, email) VALUES (?, ?)';
+    db.query(sql, [nome, email], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erro ao cadastrar contato' });
+        }
+        res.json({ message: 'Contato cadastrado com sucesso!', id: result.insertId });
+    });
 });
 
-// Rota para editar um contato existente
-app.put('/contacts/:id', (req, res) => {
-    const id = req.params.id;
-    const { name, email } = req.body;
-    const contact = contacts[id];
-    if (!contact) {
-        return res.status(404).send("Contato não encontrado.");
+// Endpoint para listar dados
+app.get('/api/contatos', (req, res) => {
+    const sql = 'SELECT * FROM contato';
+    db.query(sql, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erro ao listar contatos' });
+        }
+        res.json(results);
+    });
+});
+
+// Endpoint para editar dados
+app.put('/api/contatos/:id', (req, res) => {
+    const { id } = req.params;
+    const { nome, email } = req.body;
+
+    if (!nome || !email) {
+        return res.status(400).json({ error: 'Nome e email são obrigatórios!' });
     }
-    contact.name = name || contact.name;
-    contact.email = email || contact.email;
-    res.json(contact);
+
+    const sql = 'UPDATE contato SET nome = ?, email = ? WHERE id = ?';
+    db.query(sql, [nome, email, id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erro ao atualizar contato' });
+        }
+        res.json({ message: 'Contato atualizado com sucesso!' });
+    });
 });
 
-// Rota para excluir um contato
-app.delete('/contacts/:id', (req, res) => {
-    const id = req.params.id;
-    const contact = contacts[id];
-    if (!contact) {
-        return res.status(404).send("Contato não encontrado.");
-    }
-    contacts.splice(id, 1);
-    res.status(204).send();
+// Endpoint para excluir dados
+app.delete('/api/contatos/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = 'DELETE FROM contato WHERE id = ?';
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erro ao excluir contato' });
+        }
+        res.json({ message: 'Contato excluído com sucesso!' });
+    });
 });
 
-// Inicia o servidor
-app.listen(port, () => {
-    console.log(`Servidor rodando na porta ${port}`);
+// Iniciar o servidor
+app.listen(3000, () => {
+    console.log('Servidor rodando na porta 3000');
 });
