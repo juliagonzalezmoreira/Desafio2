@@ -1,42 +1,113 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="pt-BR">
 <head>
-    <meta charset='utf-8'>
-    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Page Title</title>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
-    <link rel="stylesheet" href="style03.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Contatos</title>
 </head>
-
 <body>
     <nav class="nav"> <img src="logo.png" alt="Logo unes" id="logo">
         <div class="nav-links">
-            <a class="nav-link" href="./index.html">Home</a>
+            <a class="nav-link"
+                href="./index.html">Home</a>
             <a class="nav-link" href="./about.html">Quem Somos</a>
-            <a class="nav-link" href="./form.html">Contatos</a>
+            <a class="nav-link"
+                href="./form.html">Contato</a>
         </div>
     </nav>
-    <div class="contact">
-        <h2>Entre em contato </h2>
-        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quo, ratione autem. Optio, quod repellat. Sed, ipsa. Optio earum odit animi.</p>
-    </div>
 
+<div class="content-rights">
+    <h2>Contatos</h2>
+    <br>
+    <label for="name">Nome:</label>
+    <input type="text" id="name" placeholder="Digite o nome">
+    <label for="email">Email:</label>
+    <input type="email" id="email" placeholder="Digite o email">
+    <button onclick="addContact()">Adicionar Contato</button>
 
-    <hr>
-    <form class="contact-form">
-        <label> Seu email:</label>
-        <input type="text" />
-        <label>Assunto:</label>
-        <input type="text" />
-        <label>Descrição:</label>
-        <textarea></textarea>
-        <button type="submit">Enviar</button>
-    </form>
-    <p class="content-rights">Todos os direitos reservados</p>
+<table>
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody id="contactList">
+        <!-- Os contatos serão adicionados aqui -->
+    </tbody>
+</table>
+
+</div>
+
+<script>
+    function renderContacts(contacts) {
+        const contactList = document.getElementById('contactList');
+        contactList.innerHTML = '';
+        contacts.forEach((contact, index) => {
+            const row = `<tr>
+                <td>${contact.name}</td>
+                <td>${contact.email}</td>
+                <td>
+                    <button onclick="editContact(${index})">Editar</button>
+                    <button onclick="deleteContact(${index})">Excluir</button>
+                </td>
+            </tr>`;
+            contactList.innerHTML += row;
+        });
+    }
+
+    function fetchContacts() {
+        fetch('/contacts')
+            .then(response => response.json())
+            .then(data => renderContacts(data));
+    }
+
+    function addContact() {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+
+        if (!name || !email) {
+            alert("Por favor, preencha todos os campos.");
+            return;
+        }
+
+        fetch('/contacts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email })
+        })
+        .then(response => response.json())
+        .then(() => {
+            fetchContacts();
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+        });
+    }
+
+    function editContact(index) {
+        const name = prompt("Novo nome:");
+        const email = prompt("Novo email:");
+
+        if (name && email) {
+            fetch(`/contacts/${index}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email })
+            })
+            .then(() => fetchContacts());
+        }
+    }
+
+    function deleteContact(index) {
+        fetch(`/contacts/${index}`, { method: 'DELETE' })
+            .then(() => fetchContacts());
+    }
+
+    // Carrega os contatos ao carregar a página
+    window.onload = fetchContacts;
+</script>
 
 </body>
-
 </html>

@@ -53,3 +53,17 @@ a.nav-link {
     font-weight: bold;
 }
 
+table {
+    border: 2px solid;
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+th, td {
+    text-align: center;
+    border: 1px solid;
+    padding: 10px;
+}
+th {
+    background-color: #b3b3d1;
+}
