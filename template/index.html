@@ -57,7 +57,7 @@
     }
 
     function fetchContacts() {
-    fetch('http://3.91.215.63:3000/api/contatos') // Atualizado com IP
+    fetch('http://54.89.63.124:3000/api/contatos') // Atualizado com IP
         .then(response => response.json())
         .then(data => renderContacts(data));
 }
@@ -71,7 +71,7 @@ function addContact() {
         return;
     }
 
-    fetch('http://3.91.215.63:3000/api/contatos', { // Atualizado com IP
+    fetch('http://54.89.63.124:3000/api/contatos', { // Atualizado com IP
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nome, email })
@@ -89,7 +89,7 @@ function editContact(id) {
     const email = prompt("Novo email:");
 
     if (nome && email) {
-        fetch(`http://3.91.215.63:3000/api/contatos/${id}`, { // Atualizado com IP
+        fetch(`http://54.89.63.124:3000/api/contatos/${id}`, { // Atualizado com IP
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nome, email })
@@ -99,7 +99,7 @@ function editContact(id) {
 }
 
 function deleteContact(id) {
-    fetch(`http://3.91.215.63:3000/api/contatos/${id}`, { method: 'DELETE' }) // Atualizado com IP
+    fetch(`http://54.89.63.124:3000/api/contatos/${id}`, { method: 'DELETE' }) // Atualizado com IP
         .then(() => fetchContacts());
 }
 
