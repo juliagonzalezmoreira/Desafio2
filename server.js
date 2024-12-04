@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, 'template')));
 
 // Conectar ao banco de dados MySQL
 const db = mysql.createConnection({
-    host: '54.81.29.104',
+    host: '3.81.58.167',
     user: 'user1',
     password: 'password1',
     database: 'crud_aws'
