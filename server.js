@@ -12,10 +12,10 @@ app.use(express.static(path.join(__dirname, 'template')));
 
 // Conectar ao banco de dados MySQL
 const db = mysql.createConnection({
-    host: '3.92.244.186',
-    user: 'peixe',
-    password: '123',
-    database: 'crud_db2'
+    host: '54.81.29.104',
+    user: 'user1',
+    password: 'password1',
+    database: 'crud_aws'
 });
 
 db.connect((err) => {
@@ -25,14 +25,14 @@ db.connect((err) => {
 
 // Endpoint para inserir dados
 app.post('/api/contatos', (req, res) => {
-    const { nome, email } = req.body;
+    const { name, email } = req.body;
 
-    if (!nome || !email) {
-        return res.status(400).json({ error: 'Nome e email são obrigatórios!' });
+    if (!name || !email) {
+        return res.status(400).json({ error: 'name e email são obrigatórios!' });
     }
 
-    const sql = 'INSERT INTO contato (nome, email) VALUES (?, ?)';
-    db.query(sql, [nome, email], (err, result) => {
+    const sql = 'INSERT INTO users (name, email) VALUES (?, ?)';
+    db.query(sql, [name, email], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Erro ao cadastrar contato' });
         }
@@ -42,7 +42,7 @@ app.post('/api/contatos', (req, res) => {
 
 // Endpoint para listar dados
 app.get('/api/contatos', (req, res) => {
-    const sql = 'SELECT * FROM contato';
+    const sql = 'SELECT * FROM users';
     db.query(sql, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Erro ao listar contatos' });
@@ -54,14 +54,14 @@ app.get('/api/contatos', (req, res) => {
 // Endpoint para editar dados
 app.put('/api/contatos/:id', (req, res) => {
     const { id } = req.params;
-    const { nome, email } = req.body;
+    const { name, email } = req.body;
 
-    if (!nome || !email) {
-        return res.status(400).json({ error: 'Nome e email são obrigatórios!' });
+    if (!name || !email) {
+        return res.status(400).json({ error: 'name e email são obrigatórios!' });
     }
 
-    const sql = 'UPDATE contato SET nome = ?, email = ? WHERE id = ?';
-    db.query(sql, [nome, email, id], (err, result) => {
+    const sql = 'UPDATE users SET name = ?, email = ? WHERE id = ?';
+    db.query(sql, [name, email, id], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Erro ao atualizar contato' });
         }
@@ -73,7 +73,7 @@ app.put('/api/contatos/:id', (req, res) => {
 app.delete('/api/contatos/:id', (req, res) => {
     const { id } = req.params;
 
-    const sql = 'DELETE FROM contato WHERE id = ?';
+    const sql = 'DELETE FROM users WHERE id = ?';
     db.query(sql, [id], (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Erro ao excluir contato' });
@@ -84,5 +84,5 @@ app.delete('/api/contatos/:id', (req, res) => {
 
 // Iniciar o servidor
 app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+    console.log('Servidor rodando');
 });
